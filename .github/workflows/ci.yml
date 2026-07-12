@@ -40,8 +40,8 @@ jobs:
       - name: Generate Gradle wrapper in CI
         run: gradle wrapper --gradle-version 8.10.2 --no-daemon
 
-      - name: Run reporting configuration tests
-        run: ./gradlew reporting --no-daemon
+      - name: Run verification checks
+        run: ./gradlew check --no-daemon
 
       - name: Checkout report history
         if: always()
