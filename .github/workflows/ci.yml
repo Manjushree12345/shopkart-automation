@@ -36,11 +36,8 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Make Gradle executable
-        run: chmod +x gradlew
-
       - name: Run tests
-        run: ./gradlew test --tests "com.shopkart.ReportingConfigurationTest"
+        run: gradle test --tests "com.shopkart.ReportingConfigurationTest"
 
 
 
