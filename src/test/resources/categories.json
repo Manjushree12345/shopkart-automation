@@ -1,5 +1,8 @@
 [
-  {"name":"Product defect","matchedStatuses":["failed"],"messageRegex":".*(AssertionError|expected).*"},
-  {"name":"Test defect","matchedStatuses":["broken"],"messageRegex":".*(locator|500|WebDriver).*"},
-  {"name":"Flaky","matchedStatuses":["passed"],"flaky":true}
+  {"name":"Assertion Failures","matchedStatuses":["failed"],"messageRegex":".*(AssertionFailedError|AssertionError|expected).*"},
+  {"name":"UI Automation Issues","matchedStatuses":["failed","broken"],"messageRegex":".*(NoSuchElementException|WebDriver|locator).*"},
+  {"name":"Database Issues","matchedStatuses":["failed"],"messageRegex":".*(SQLException|SQLIntegrityConstraintViolationException|SQL).*"},
+  {"name":"Configuration Issues","matchedStatuses":["failed"],"messageRegex":".*(IllegalArgumentException|Configuration).*"},
+  {"name":"Infrastructure Issues","matchedStatuses":["failed"],"messageRegex":".*(TimeoutException|Connection refused|ConnectionReset).*"},
+  {"name":"Other Failures","matchedStatuses":["failed","broken","skipped"],"messageRegex":".*"}
 ]
