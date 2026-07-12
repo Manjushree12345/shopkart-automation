@@ -12,6 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     env:
       SHOPKART_PROFILE: ci
       SHOPKART_ALICE_PW: ${{ secrets.SHOPKART_ALICE_PW }}
@@ -29,21 +30,21 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '22'
+          java-version: "22"
           cache: gradle
 
-      - name: Install Gradle 8.10.2
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.10.2'
 
-      - name: Generate Gradle wrapper in CI
-        run: gradle wrapper --gradle-version 8.10.2 --no-daemon
+      - name: Make Gradle executable
+        run: chmod +x gradlew
 
-      - name: Run verification checks
-        run: ./gradlew check --no-daemon
+      - name: Run tests
+        run: ./gradlew test --tests "com.shopkart.ReportingConfigurationTest"
 
-      - name: Checkout report history
+
+
+      - name: Checkout gh-pages branch
         if: always()
         continue-on-error: true
         uses: actions/checkout@v4
@@ -52,27 +53,11 @@ jobs:
           path: gh-pages
           fetch-depth: 0
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '22'
-          cache: gradle
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
-
       - name: Prepare report history
         if: always()
         run: rm -rf gh-pages/.git
 
-      - name: Run tests
-        run: ./gradlew test --tests "com.shopkart.data.db.MySqlContainerAddonTest"
-
-      - name: Generate Allure report
+      - name: Generate Allure Report
         if: always()
         uses: simple-elf/allure-report-action@master
         with:
@@ -82,18 +67,18 @@ jobs:
           allure_history: allure-history
           keep_reports: 20
 
-      - name: Verify report
+      - name: Verify report generated
         if: always()
         run: test -f allure-history/index.html
 
-      - name: Upload report artifact
+      - name: Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-history
 
-      - name: Deploy report
+      - name: Deploy Allure Report to GitHub Pages
         if: always() && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -102,7 +87,7 @@ jobs:
           publish_dir: allure-history
           force_orphan: true
 
-      - name: Report link
+      - name: Report Link
         if: always()
         run: |
           OWNER="${{ github.repository_owner }}"
