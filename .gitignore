@@ -1,0 +1,8 @@
+.gradle/
+build/
+target/
+.idea/
+*.iml
+secrets.local.properties
+allure-report/
+ 
